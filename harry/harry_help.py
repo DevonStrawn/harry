@@ -1,13 +1,13 @@
 """Functions used to convert an HTTP Archive into a JMeter Test Plan."""
 from jinja2 import Environment, PackageLoader
 import xml.dom.minidom
+import lxml.etree
 ENV = Environment(loader=PackageLoader('harry_help', 'templates'))
 
 
 def _verbose_print(message):
     """Write message to STDOUT."""
     print message
-
 
 def generate_test_plan(har, output='test_plan.jmx'):
     """Convert a HTTP Archive and write out a JMeter Test Plan."""
@@ -16,13 +16,12 @@ def generate_test_plan(har, output='test_plan.jmx'):
     for page in har.pages:
         entries = har.entries_by_page_ref(page.id)
         formatted_pages.append(generate_page(page.id, entries))
-    generated_test = test_plan_template.render(pages=formatted_pages)
+    generated_test = str(test_plan_template.render(pages=formatted_pages))
     # format test
-    formatted_xml = xml.dom.minidom.parseString(generated_test) 
-    pretty_xml = formatted_xml.toprettyxml()
+    pretty_xml = lxml.etree.XML(generated_test)
     try:
         output_file = open(output, 'w')
-        output_file.write(pretty_xml)
+        output_file.write(lxml.etree.tostring(pretty_xml, encoding='utf-8'))
     except IOError:
         print 'ERROR:'
         print 'do not have permission to write to file.'
