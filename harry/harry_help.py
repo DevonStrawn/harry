@@ -18,8 +18,8 @@ def generate_test_plan(har, output='test_plan.jmx'):
         formatted_pages.append(generate_page(page.id, entries))
     generated_test = test_plan_template.render(pages=formatted_pages)
     # format test
-    formatted_xml = xml.dom.minidom.parseString(xml_fname) 
-    pretty_xml = xml.toprettyxml()
+    formatted_xml = xml.dom.minidom.parseString(generated_test) 
+    pretty_xml = formatted_xml.toprettyxml()
     try:
         output_file = open(output, 'w')
         output_file.write(pretty_xml)
