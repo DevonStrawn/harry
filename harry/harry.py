@@ -66,7 +66,7 @@ def main():
 
 if __name__ == '__main__':
     ARGUMENTS = docopt(__doc__, version='harry 0.0.1')
-    if ARGUMENTS['--verbose'] or ARGUMENTS['-v']:
+    if ('--verbose' in ARGUMENTS and ARGUMENTS['--verbose']) or ('-v' in ARGUMENTS and ARGUMENTS['-v']):
         VERBOSE_PRINT = _verbose_print
     else:
         VERBOSE_PRINT = lambda *x: None
