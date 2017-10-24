@@ -38,6 +38,11 @@ from harry_help import generate_test_plan, _verbose_print
 
 def main():
     """Convert HTTP Archive to JMeter Test Plan."""
+    output_file = 'test_plan.jmx'
+
+    if ARGUMENTS['-o'] or ARGUMENTS['--output']:
+        output_file = ARGUMENTS['<out>']
+
     if ARGUMENTS['-i'] or ARGUMENTS['--input']:
         input_file = ARGUMENTS['<in>']
         VERBOSE_PRINT('Attempting to convert input file: ' + input_file + '\n')
@@ -58,7 +63,6 @@ def main():
             print input_file + ' does not conform to the HTTP Archive standard'
             print 'Expected the following key: ' + str(missing_key).strip('\'')
         if har is not None:
-            output_file = 'test_plan.jmx'
             generate_test_plan(har, output_file)
     else:
         print __doc__
